@@ -1,0 +1,3 @@
+url.rewrite-final += ( "^{url}(wp-admin|wp-includes|wp-content|gallery2)(/(.*))?" => "$0" )
+url.rewrite-final += ( "^{url}(.*\.php)" => "$0" )
+url.rewrite-final += ( "^{url}([^?]*)(\?.*)?$" => "{url}index.php$2" )

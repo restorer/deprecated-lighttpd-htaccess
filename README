@@ -1,0 +1,10 @@
+Something like .htaccess for lighttpd.
+Some features is not supported (like RewriteCond %{REQUEST_FILENAME} !-f),
+but still makes live with lighty much easier.
+
+How to install:
+
+1) Put enable-sites.pl in /usr/share/lighttpd
+
+2) Append to the end of lighttpd.conf following line:
+   include_shell "/usr/share/lighttpd/enable-sites.pl"
