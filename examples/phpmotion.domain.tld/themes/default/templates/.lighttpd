@@ -1,0 +1,2 @@
+url.access-deny += ( ".htm", ".html" )
+server.error-handler-404 = "/404.php"

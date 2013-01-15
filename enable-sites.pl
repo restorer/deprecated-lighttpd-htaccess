@@ -13,8 +13,7 @@ my %already = ();
 my @confs = ();
 my $find_name = '';
 
-sub find_confs
-{
+sub find_confs {
 	my $file = $File::Find::name;
 	my $name = basename($file);
 
@@ -25,16 +24,14 @@ sub find_confs
 
 # -------------------------------------------------------------------
 
-sub print_lighttpd
-{
+sub print_lighttpd {
 	my $root = shift;
 
 	@confs = ();
 	$find_name = '.lighttpd';
 	find(\&find_confs, $root);
 
-	for my $conf_name (@confs)
-	{
+	for my $conf_name (@confs) {
 		my $url = dirname(substr($conf_name, length($root) - 1));
 		$already{$url} = 1;
 
@@ -52,18 +49,19 @@ sub print_lighttpd
 		my @inner = ();
 		my @outer = ();
 
-		for my $line (@lines)
-		{
+		for my $line (@lines) {
 			chomp($line);
+			$line =~ s/^\s\s*//;
+			$line =~ s/\s\s*$//;
 
 			$line =~ s/\{dir\}/$dir/g;
 			$line =~ s/\{url\}/$url_sl/g;
 			$line =~ s/\{root\}/$root/g;
 
-			if ($line =~ /^\s*url\.rewrite/) {
-			    push(@outer, $line);
-			} else {
-			    push(@inner, $line);
+			if (($line =~ /^\s*url\.rewrite/) || ($line =~ /^\s*url\.redirect/)) {
+				push(@outer, $line);
+			} elsif (($line ne '') && !($line =~ /^#/)) {
+				push(@inner, $line);
 			}
 		}
 
@@ -71,13 +69,13 @@ sub print_lighttpd
 		my $outer_conf = join("\n", @outer);
 
 		if ($url ne '/') {
-    			print "\t\$HTTP[\"url\"] =~ \"^$url_esc/\" {\n";
+			print "\$HTTP[\"url\"] =~ \"^$url_esc/\" {\n";
 		}
 
 		print "$conf\n";
 
 		if ($url ne '/') {
-			print "\t}\n";
+			print "}\n";
 		}
 
 		if ($outer_conf ne '') {
@@ -88,61 +86,13 @@ sub print_lighttpd
 
 # -------------------------------------------------------------------
 
-my @ht_indexes = ();
-my %ht_errors = ();
-my $ht_deny_all = 0;
-my @ht_rules = ();
-my $ht_charset = '';
-
-sub read_htaccess
-{
-	my $file = shift;
-
-	open(F_CONF, $file);
-	my @lines = <F_CONF>;
-	close(F_CONF);
-
-	@ht_indexes = ();
-	%ht_errors = ();
-	$ht_deny_all = 0;
-	@ht_rules = ();
-	$ht_charset = '';
-
-#	for my $line (@lines)
-#	{
-#	}
-}
-
-sub print_htaccess
-{
-	my $root = shift;
-
-	@confs = ();
-	$find_name = '.htaccess';
-	find(\&find_confs, $root);
-
-	for my $conf_name (@confs)
-	{
-		my $url = dirname(substr($conf_name, length($root) - 1));
-
-		if (!$already{$url})
-		{
-			read_htaccess($conf_name);
-		}
-	}
-}
-
-# -------------------------------------------------------------------
-
-sub print_fastcgi
-{
+sub print_fastcgi {
 	my $root_name = shift;
 
 	open(F_ORIG_INI, "/etc/php5/cgi/php.ini");
 	open(F_INI, ">/var/run/lighttpd-runner/php-${root_name}.ini");
 
-	while (<F_ORIG_INI>)
-	{
+	while (<F_ORIG_INI>) {
 		chomp;
 		my $line = $_;
 
@@ -156,7 +106,7 @@ sub print_fastcgi
 	close(F_INI);
 	close(F_ORIG_INI);
 
-    print<<EOF
+	print<<EOF
 	fastcgi.server = ( ".php" => 
 		((
 			"bin-path" => "/usr/bin/php5-cgi -c /var/run/lighttpd-runner/php-${root_name}.ini",
@@ -183,10 +133,8 @@ EOF
 chdir($document_root);
 my @files = bsd_glob('*');
 
-for my $root_name (@files)
-{
-	if ($root_name =~ /\./)
-	{
+for my $root_name (@files) {
+	if ($root_name =~ /\./) {
 		my $root = $document_root . $root_name . '/';
 
 		my $root_name_esc = $root_name;
@@ -194,18 +142,14 @@ for my $root_name (@files)
 
 		my @aliases = ();
 
-		if (-e "$root/.enable-www")
-		{
+		if (-e "$root/.enable-www") {
 			push @aliases, 'www';
-		}
-		elsif (-e "$root/.aliases")
-		{
+		} elsif (-e "$root/.aliases") {
 			open(F_ALIASES, "$root/.aliases");
 			my @lines = <F_ALIASES>;
 			close(F_ALIASES);
 
-			for my $line (@lines)
-			{
+			for my $line (@lines) {
 				chomp($line);
 				push @aliases, $line if $line ne '';
 			}
@@ -219,14 +163,13 @@ for my $root_name (@files)
 		}
 
 		unless (-e "$root/.disable-def") {
-			print "\tserver.document-root = \"$root\"\n";
+			print "server.document-root = \"$root\"\n";
 		}
 
 		# print_fastcgi($root_name);
 
 		%already = ();
 		print_lighttpd($root);
-		# print_htaccess($root);
 
 		print "}\n";
 	}

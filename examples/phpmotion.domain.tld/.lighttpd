@@ -1,0 +1,71 @@
+# Allow pictures, videos and swf files
+
+url.rewrite-once += ( "\.(?:css|jpe?g|gif|png|flv|swf)(?:\?.*)?$" => "$0" )
+
+# Main Menu Links
+
+url.rewrite-once += ( "^{url}videos/load/([^/?]*)(?:\?(.*))?$" => "{url}seemore.php?load=$1&$2" )
+url.rewrite-once += ( "^{url}videos/load/([^/?]*)/([^/?]*)(?:\?(.*))?$" => "{url}seemore.php?load=$1&page=$2&$3" )
+
+url.rewrite-once += ( "^{url}audios/load/([^/?]*)(?:\?(.*))?$" => "{url}audio.php?load=$1&$2" )
+url.rewrite-once += ( "^{url}audios/load/([^/?]*)/([^/?]*)(?:\?(.*))?$" => "{url}audio.php?load=$1&page=$2&$3" )
+
+url.rewrite-once += ( "^{url}audios/album/([^/?]*)/(?:[^/?]*)(?:\?(.*))?$" => "{url}audio.php?album=$1&$2" )
+url.rewrite-once += ( "^{url}audios/album/([^/?]*)/(?:[^/?]*)/([^/?]*)(?:\?(.*))?$" => "{url}audio.php?album=$1&page=$2&$3" )
+
+url.rewrite-once += ( "^{url}blogs/load/([^/?]*)(?:\?(.*))?$" => "{url}blogs.php?load=$1&$2" )
+url.rewrite-once += ( "^{url}blogs/load/([^/?]*)/([^/?]*)(?:\?(.*))?$" => "{url}blogs.php?load=$1&page=$2&$3" )
+
+url.rewrite-once += ( "^{url}albums/load/([^/?]*)(?:\?(.*))?$" => "{url}albums.php?load=$1&$2" )
+url.rewrite-once += ( "^{url}albums/([^/?]*)/([^/?]*)(?:\?(.*))?$" => "{url}albums.php?load=$1&page=$2&$3" )
+
+url.rewrite-once += ( "^{url}people_ajax(?:\?(.*))?" => "{url}people_ajax.php?$1" )
+url.rewrite-once += ( "^{url}people/([^/?]*)/([^/?]*)(?:\?(.*))?" => "{url}people.php?load=$1&page=$2&$3" )
+url.rewrite-once += ( "^{url}people(?:\?(.*))?" => "{url}people.php?$1" )
+url.rewrite-once += ( "^{url}upload-media(?:\?(.*))?" => "{url}upload.php?$1" )
+
+url.rewrite-once += ( "^{url}groups(?:\?(.*))?" => "{url}groups.php?$1" )
+url.rewrite-once += ( "^{url}search(?:\?(.*))?" => "{url}search.php?$1" )
+
+# Action Links
+
+url.rewrite-once += ( "^{url}videos/([^/?]*)/(?:[^/?]*)(?:\?(.*))?$" => "{url}play.php?vid=$1&$2" )
+url.rewrite-once += ( "^{url}audio/([^/?]*)/(?:[^/?]*)(?:\?(.*))?$" => "{url}play_audio.php?audio=$1&$2" )
+
+url.rewrite-once += ( "^{url}category/([^/?]*)(?:\?(.*))?$" => "{url}category_home.php?cid=$1&$2" )
+url.rewrite-once += ( "^{url}category/([^/?]*)/([^/?]*)(?:\?(.*))?$" => "{url}category_home.php?cid=$1&page=$2&$3" )
+
+url.rewrite-once += ( "^{url}subcategory/([^/?]*)/(?:[^/?]*)(?:\?(.*))?$" => "{url}category_home.php?sub=$1&$2" )
+url.rewrite-once += ( "^{url}subcategory/([^/?]*)/(?:[^/?]*)/([^/?]*)(?:\?(.*))?$" => "{url}category_home.php?sub=$1&page=$2&$3" )
+
+url.rewrite-once += ( "^{url}genre/([^/?]*)(?:\?(.*))?$" => "{url}genre_home.php?cid=$1&$2" )
+url.rewrite-once += ( "^{url}genre/([^/?]*)/([^/?]*)(?:\?(.*))?$" => "{url}genre_home.php?cid=$1&page=$2&$3" )
+
+url.rewrite-once += ( "^{url}view-album/([^/?]*)/(?:[^/?]*)(?:\?(.*))?$" => "{url}album_view.php?album=$1&$2" )
+url.rewrite-once += ( "^{url}view-image/([^/?]*)/(?:[^/?]*)(?:\?(.*))?$" => "{url}album_view.php?image=$1&$2" )
+url.rewrite-once += ( "^{url}read_blog/([^/?]*)/(?:[^/?]*)(?:\?(.*))?$" => "{url}read_blog.php?id=$1&$2" )
+
+url.rewrite-once += ( "^{url}blogs/category/([^/?]*)/(?:[^/?]*)(?:\?(.*))?$" => "{url}blogs.php?cat_id=$1&$2" )
+url.rewrite-once += ( "^{url}blogs/category/([^/?]*)/(?:[^/?]*)/([^/?]*)(?:\?(.*))?$" => "{url}blogs.php?cat_id=$1&page=$2&$3" )
+
+url.rewrite-once += ( "^{url}members/([^/?]*)(?:\?(.*))?$" => "{url}memberprofile.php?user=$1&$2" )
+
+# Redirect directory browsing attempts
+
+url.rewrite-once += ( "^{url}videos/?(?:\?.*)?$" => "{url}seemore.php" )
+url.rewrite-once += ( "^{url}audios/?(?:\?.*)?$" => "{url}audio.php" )
+url.rewrite-once += ( "^{url}blogs/?(?:\?.*)?$" => "{url}blogs.php" )
+url.redirect += ( "^{url}members/?(?:\?.*)?$" => "{url}people" )
+url.rewrite-once += ( "^{url}albums/?(?:\?.*)?$" => "{url}albums.php" )
+
+# Some simple blocks
+
+url.rewrite-once += ( "^{url}[^?]*\?.*?(?i)(?:<|%3C).*script.*(?:>|%3E)" => "{url}index.php" )
+url.rewrite-once += ( "^{url}[^?]*\?.*?GLOBALS(?:=|\[|%[0-9A-Za-z]{0,2})" => "{url}index.php" )
+url.rewrite-once += ( "^{url}[^?]*\?.*?_REQUEST(?:=|\[|%[0-9A-Za-z]{0,2})" => "{url}index.php" )
+url.rewrite-once += ( "^{url}[^?]*\?.*?SELECT(?:=|\[|%[0-9A-Za-z]{0,2})" => "{url}index.php" )
+url.rewrite-once += ( "^{url}[^?]*\?.*?UNION(?:=|\[|%[0-9A-Za-z]{0,2})" => "{url}index.php" )
+
+# Error handlers
+
+server.error-handler-404 = "/404.php"
