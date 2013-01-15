@@ -23,21 +23,23 @@ How to install
 Directory structure
 ===================
 
-    |- var
-    |  |- www
-    |  |  |- somehost.com
-    |  |  |  |- .aliases
-    |  |  |  |- .lighttpd
-    |  |  |  |- somefile.php
-    |  |  |  |- sources
-    |  |  |  |  |- .lighttpd
-    |  |  |  |  |- nextfile.php
-    |  |  |  |- ...
-    |  |  |- anotherhost.net
-    |  |  |  |- .enable-www
-    |  |  |  |- .lighttpd
-    |  |  |  |- anotherfile.php
-    |  |  |  |- ...
+```
+|- var
+|  |- www
+|  |  |- somehost.com
+|  |  |  |- .aliases
+|  |  |  |- .lighttpd
+|  |  |  |- somefile.php
+|  |  |  |- sources
+|  |  |  |  |- .lighttpd
+|  |  |  |  |- nextfile.php
+|  |  |  |- ...
+|  |  |- anotherhost.net
+|  |  |  |- .enable-www
+|  |  |  |- .lighttpd
+|  |  |  |- anotherfile.php
+|  |  |  |- ...
+```
 
 .aliases
 ========
@@ -56,7 +58,7 @@ Than folder will be accessible at somehost.com, www.somehost.com, temp.somehost.
 .enable-www
 ===========
 
-Empty file. Same as append "www" to .aliases.
+Empty file. Same as appending "www" to .aliases.
 If domain is "anotherhost.net" and there is .enable-www in it's folder,
 than folder will be accessible at anotherhost.net and www.anotherhost.net
 
@@ -67,7 +69,9 @@ Per-directory configuration file.
 Following substitutions available:
 
 **{root}** - root path of current virtual host folder with trailing slash (for example "/var/www/somehost.com/")
+
 **{dir}** - current directory path with trailing slash (for example "/var/www/somehost.com/sources/")
+
 **{url}** - current directory url with trailing slash (for example "/sources/")
 
 Example of lighttpd.conf
