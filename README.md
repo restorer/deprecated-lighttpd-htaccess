@@ -1,3 +1,5 @@
+[deprecated]
+
 What is it?
 ===========
 
